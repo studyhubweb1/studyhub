@@ -51,7 +51,7 @@ RNF05	O envio de e-mails será implementado usando Nodemailer.
 
 6. Arquitetura do Sistema
 
-EstudoHub/
+StudyHub/
 │
 ├── /backend
 │   ├── server.js          # Servidor Express
