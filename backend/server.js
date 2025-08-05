@@ -69,7 +69,7 @@ app.listen(PORT, () => {
     console.log(`📱 Acesse: http://localhost:${PORT}`);
     
     // Iniciar serviço de lembretes
-    emailService.startReminderService();
+   // emailService.startReminderService();
 });
 
 // Graceful shutdown
@@ -77,3 +77,13 @@ process.on('SIGINT', () => {
     console.log('\n⏳ Encerrando servidor...');
     process.exit(0);
 });
+
+const express = require('express');
+const router = express.Router();
+
+// Definir rotas
+router.post('/login', (req, res) => {
+    res.send('Login realizado');
+});
+
+module.exports = router;

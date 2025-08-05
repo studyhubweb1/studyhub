@@ -1,3 +1,4 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 const db = require('../database');
 
@@ -5,7 +6,7 @@ class EmailService {
     constructor() {
         // Configurar transportador de e-mail
         // Para desenvolvimento, use um serviço como Ethereal Email ou configure com Gmail
-        this.transporter = nodemailer.createTransporter({
+        this.transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST || 'smtp.ethereal.email',
             port: process.env.SMTP_PORT || 587,
             secure: false,
