@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EstudoHub - Áreas de Estudo</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>📚 EstudoHub</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="areas.html" class="nav-link active">Áreas</a>
+                <a href="tarefas.html" class="nav-link">Tarefas</a>
+                <a href="provas.html" class="nav-link">Provas</a>
+                <div class="nav-user">
+                    <span id="userName">Usuario</span>
+                    <button id="logoutBtn" class="btn btn-outline">Sair</button>
+                </div>
+            </div>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>📖 Áreas de Estudo</h1>
+            <button id="novaAreaBtn" class="btn btn-primary">+ Nova Área</button>
+        </div>
+
+        <div class="areas-grid" id="areasGrid">
+            <div class="loading">Carregando áreas...</div>
+        </div>
+    </main>
+
+    <!-- Modal Nova/Editar Área -->
+    <div id="areaModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Nova Área de Estudo</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="areaForm">
+                <div class="form-group">
+                    <label for="areaNome">Nome da Área *</label>
+                    <input type="text" id="areaNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="areaDescricao">Descrição</label>
+                    <textarea id="areaDescricao" rows="3" placeholder="Descreva os tópicos e objetivos desta área..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" id="cancelarBtn">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmar Exclusão</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir esta área de estudo?</p>
+                <p class="warning-text">⚠️ Todas as tarefas associadas também serão excluídas!</p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" id="cancelarExclusao">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmarExclusao">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Feedback -->
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalMessage"></div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/areas.js"></script>
+</body>
+</html>

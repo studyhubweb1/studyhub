@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EstudoHub - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>📚 EstudoHub</h1>
+                <p>Organize seus estudos de forma inteligente</p>
+            </div>
+
+            <div class="login-tabs">
+                <button id="loginTab" class="tab-button active">Login</button>
+                <button id="registerTab" class="tab-button">Cadastro</button>
+            </div>
+
+            <!-- Formulário de Login -->
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label for="loginEmail">E-mail</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginSenha">Senha</label>
+                    <input type="password" id="loginSenha" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+
+            <!-- Formulário de Cadastro -->
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registerNome">Nome Completo</label>
+                    <input type="text" id="registerNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">E-mail</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerSenha">Senha</label>
+                    <input type="password" id="registerSenha" required minlength="6">
+                    <span class="helper-text">Mínimo 6 caracteres</span>
+                </div>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </form>
+
+            <!-- Demo Info -->
+            <div class="demo-info">
+                <h3>🚀 Funcionalidades</h3>
+                <ul>
+                    <li>✅ Gerenciamento de áreas de estudo</li>
+                    <li>✅ Organização de tarefas e aulas</li>
+                    <li>✅ Calendário de provas e prazos</li>
+                    <li>✅ Dashboard com estatísticas</li>
+                    <li>✅ Lembretes automáticos por e-mail</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Feedback -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalMessage"></div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
