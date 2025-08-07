@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EstudoHub - Login</title>
+    <title>StudyHub - Login</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="login-page">
     <div class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <h1>📚 EstudoHub</h1>
+                <h1>📚 StudyHub</h1>
                 <p>Organize seus estudos de forma inteligente</p>
             </div>
 
@@ -33,22 +33,24 @@
             </form>
 
             <!-- Formulário de Cadastro -->
-            <form id="registerForm" class="auth-form">
-                <div class="form-group">
-                    <label for="registerNome">Nome Completo</label>
-                    <input type="text" id="registerNome" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerEmail">E-mail</label>
-                    <input type="email" id="registerEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerSenha">Senha</label>
-                    <input type="password" id="registerSenha" required minlength="6">
-                    <span class="helper-text">Mínimo 6 caracteres</span>
-                </div>
-                <button type="submit" class="btn btn-primary">Cadastrar</button>
-            </form>
+            <div id="registerTab" class="tab">
+                <h2>Criar Conta</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerNome">Nome Completo</label>
+                        <input type="text" id="registerNome" placeholder="Nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">E-mail</label>
+                        <input type="email" id="registerEmail" placeholder="E-mail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerSenha">Senha</label>
+                        <input type="password" id="registerSenha" placeholder="Senha" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </form>
+            </div>
 
             <!-- Demo Info -->
             <div class="demo-info">

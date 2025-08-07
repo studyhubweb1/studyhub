@@ -2,9 +2,13 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../database');
+const emailService = require('../utils/mailer');
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'estudohub-secret-key-2024';
+if (!process.env.JWT_SECRET) {
+    console.warn('Aviso: Usando chave JWT padrão. Configure JWT_SECRET no ambiente para produção.');
+}
 
 // Middleware de autenticação
 const authenticateToken = (req, res, next) => {
@@ -64,7 +68,7 @@ router.post('/register', async (req, res) => {
 
         // Gerar token
         const token = jwt.sign(
-            { userId: result.id, email },
+            { userId: result.lastID, email },
             JWT_SECRET,
             { expiresIn: '7d' }
         );
@@ -73,7 +77,7 @@ router.post('/register', async (req, res) => {
             success: true,
             message: 'Usuário cadastrado com sucesso',
             token,
-            user: { id: result.id, nome, email }
+            user: { id: result.lastID, nome, email }
         });
 
     } catch (error) {
@@ -172,4 +176,60 @@ router.get('/verify', authenticateToken, async (req, res) => {
     }
 });
 
-module.exports = { router, authenticateToken };
+// Rota para solicitar redefinição de senha
+router.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ success: false, message: 'E-mail é obrigatório' });
+    }
+
+    try {
+        const user = await db.get('SELECT id, email FROM users WHERE email = ?', [email]);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Usuário não encontrado' });
+        }
+
+        // Gerar token de redefinição de senha
+        const resetToken = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
+
+        // Enviar e-mail com o link de redefinição
+        const resetLink = `http://localhost:3000/reset-password.html?token=${resetToken}`;
+        await emailService.sendReminderEmail(
+            user.email,
+            'Usuário',
+            { titulo: 'Redefinição de Senha', descricao: `Clique no link para redefinir sua senha: ${resetLink}`, data: '' }
+        );
+
+        res.json({ success: true, message: 'E-mail de redefinição de senha enviado com sucesso' });
+    } catch (error) {
+        console.error('Erro ao solicitar redefinição de senha:', error);
+        res.status(500).json({ success: false, message: 'Erro interno do servidor' });
+    }
+});
+
+// Rota para redefinir senha
+router.post('/reset-password', async (req, res) => {
+    const { token, novaSenha } = req.body;
+
+    if (!token || !novaSenha) {
+        return res.status(400).json({ success: false, message: 'Token e nova senha são obrigatórios' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const hashedPassword = await bcrypt.hash(novaSenha, 10);
+
+        await db.run('UPDATE users SET senha = ? WHERE id = ?', [hashedPassword, decoded.userId]);
+
+        res.json({ success: true, message: 'Senha redefinida com sucesso' });
+    } catch (error) {
+        console.error('Erro ao redefinir senha:', error);
+        res.status(400).json({ success: false, message: 'Token inválido ou expirado' });
+    }
+});
+
+module.exports = { 
+    router, 
+    authenticateToken
+};

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EstudoHub - Sua Plataforma de Estudos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bem-vindo ao EstudoHub</h1>
+            <nav>
+                <ul>
+                    <li><a href="#loginTab" class="active">Login</a></li>
+                    <li><a href="#registerTab">Criar Conta</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <div id="loginTab" class="tab active">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <input type="email" id="loginEmail" placeholder="E-mail" required>
+                    <input type="password" id="loginSenha" placeholder="Senha" required>
+                    <button type="submit">Entrar</button>
+                </form>
+            </div>
+
+            <div id="registerTab" class="tab">
+                <h2>Criar Conta</h2>
+                <form id="registerForm">
+                    <input type="text" id="registerNome" placeholder="Nome" required>
+                    <input type="email" id="registerEmail" placeholder="E-mail" required>
+                    <input type="password" id="registerSenha" placeholder="Senha" required>
+                    <button type="submit">Cadastrar</button>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2023 EstudoHub. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

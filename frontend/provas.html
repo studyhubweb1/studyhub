@@ -71,7 +71,7 @@
                 <h3 id="modalTitle">Nova Prova</h3>
                 <span class="close">&times;</span>
             </div>
-            <form id="provaForm">
+            <form id="novaProvaForm">
                 <div class="form-group">
                     <label for="provaTitulo">Título da Prova *</label>
                     <input type="text" id="provaTitulo" required placeholder="Ex: Prova de Matemática">
@@ -83,6 +83,27 @@
                 <div class="form-group">
                     <label for="provaDescricao">Descrição</label>
                     <textarea id="provaDescricao" rows="3" placeholder="Tópicos da prova, observações importantes..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="materia">Matéria</label>
+                    <select id="materia" name="materia" required>
+                        <option value="">Selecione</option>
+                        <option value="matematica">Matemática</option>
+                        <option value="portugues">Português</option>
+                        <option value="historia">História</option>
+                        <option value="ciencias">Ciências</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Lembretes</label>
+                    <div>
+                        <input type="checkbox" id="lembreteEmail" name="lembreteEmail">
+                        <label for="lembreteEmail">E-mail</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="lembreteWhatsapp" name="lembreteWhatsapp">
+                        <label for="lembreteWhatsapp">WhatsApp</label>
+                    </div>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-outline" id="cancelarProva">Cancelar</button>

@@ -3,14 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EstudoHub - Dashboard</title>
+    <title>StudyHub - Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
+    <script>
+        // Exibir o loader de autenticação até que a verificação seja concluída
+        document.addEventListener('DOMContentLoaded', () => {
+            const authLoader = document.getElementById('auth-loader');
+            authLoader.style.display = 'block';
+        });
+    </script>
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
-                <h2>📚 EstudoHub</h2>
+                <h2>📚 StudyHub</h2>
             </div>
             <div class="nav-menu">
                 <a href="dashboard.html" class="nav-link active">Dashboard</a>
@@ -18,7 +25,8 @@
                 <a href="tarefas.html" class="nav-link">Tarefas</a>
                 <a href="provas.html" class="nav-link">Provas</a>
                 <div class="nav-user">
-                    <span id="userName">Usuario</span>
+                    <span id="userName">Usuário</span>
+                    <button id="editAccountBtn" class="btn btn-outline">Editar Conta</button>
                     <button id="logoutBtn" class="btn btn-outline">Sair</button>
                 </div>
             </div>
@@ -109,6 +117,22 @@
         </div>
     </div>
 
+    <div id="auth-loader" style="display: none; text-align: center; padding: 20px;">
+        <p>🔒 Verificando autenticação...</p>
+    </div>
+
+    <script>
+        // Ocultar o loader de autenticação após a verificação
+        document.addEventListener('DOMContentLoaded', async () => {
+            const authLoader = document.getElementById('auth-loader');
+            const isAuthenticated = await AuthManager.verifyAuth();
+            authLoader.style.display = 'none';
+
+            if (!isAuthenticated) {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
     <script src="js/main.js"></script>
     <script src="js/dashboard.js"></script>
 </body>

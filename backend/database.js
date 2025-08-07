@@ -1,5 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 class Database {
     constructor() {
@@ -9,6 +10,7 @@ class Database {
             } else {
                 console.log('Conectado ao banco SQLite.');
                 this.initTables();
+                this.createAdminUser(); // Criar usuário administrador
             }
         });
     }
@@ -67,6 +69,28 @@ class Database {
         console.log('Tabelas inicializadas com sucesso.');
     }
 
+    async createAdminUser() {
+        const adminEmail = 'admin@studyhub.com';
+        const adminPassword = 'admin'; // Senha padrão
+        const saltRounds = 10;
+
+        try {
+            const adminExists = await this.get('SELECT id FROM users WHERE email = ?', [adminEmail]);
+            if (!adminExists) {
+                const hash = await bcrypt.hash(adminPassword, saltRounds);
+                await this.run(
+                    'INSERT INTO users (nome, email, senha) VALUES (?, ?, ?)',
+                    ['Admin', adminEmail, hash]
+                );
+                console.log('Usuário administrador criado com sucesso.');
+            } else {
+                console.log('Usuário administrador já existe.');
+            }
+        } catch (error) {
+            console.error('Erro ao criar usuário administrador:', error.message);
+        }
+    }
+
     // Métodos de execução
     run(sql, params = []) {
         return new Promise((resolve, reject) => {
@@ -102,6 +126,14 @@ class Database {
                 }
             });
         });
+    }
+
+    getAllUsers() {
+        return this.all('SELECT id, nome, email, created_at FROM users');
+    }
+
+    deleteUserById(userId) {
+        return this.run('DELETE FROM users WHERE id = ?', [userId]);
     }
 
     close() {

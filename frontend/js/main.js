@@ -87,8 +87,8 @@ class Utils {
 
 // Gerenciador de autenticação
 class AuthManager {
-    static TOKEN_KEY = 'estudohub_token';
-    static USER_KEY = 'estudohub_user';
+    static TOKEN_KEY = 'studyhub_token'; // Renomeado
+    static USER_KEY = 'studyhub_user';   // Renomeado
 
     static getToken() {
         return localStorage.getItem(this.TOKEN_KEY);
@@ -115,34 +115,13 @@ class AuthManager {
 
     static async verifyAuth() {
         const token = this.getToken();
-        if (!token) {
-            window.location.href = 'index.html';
-            return false;
-        }
+        if (!token) return false;
 
         try {
-            const response = await fetch(`${API_BASE_URL}/auth/verify`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                this.logout();
-                return false;
-            }
-
-            const data = await response.json();
-            if (data.success) {
-                this.setUser(data.user);
-                return true;
-            } else {
-                this.logout();
-                return false;
-            }
+            const response = await ApiClient.get('/auth/verify');
+            return response.success;
         } catch (error) {
-            console.error('Erro na verificação de autenticação:', error);
-            this.logout();
+            console.error('Auth verification failed:', error);
             return false;
         }
     }
@@ -208,19 +187,22 @@ class ApiClient {
 
 // Inicialização global
 document.addEventListener('DOMContentLoaded', async () => {
-    // Configurar navegação móvel
-    setupMobileNavigation();
-    
-    // Configurar fechamento de modais
-    setupModalClosing();
+    const token = AuthManager.getToken();
+    const isAuthPage = window.location.pathname.includes('index.html') || 
+                      window.location.pathname === '/';
 
-    // Se não estiver na página de login, verificar autenticação
-    if (!window.location.pathname.includes('index.html') && window.location.pathname !== '/') {
-        const isAuthenticated = await AuthManager.verifyAuth();
-        if (isAuthenticated) {
-            updateUserInfo();
-            setupLogout();
+    if (token && !isAuthPage) {
+        try {
+            const isValid = await AuthManager.verifyAuth();
+            if (!isValid) {
+                AuthManager.logout();
+            }
+        } catch (error) {
+            console.error('Verification error:', error);
+            AuthManager.logout();
         }
+    } else if (!token && !isAuthPage) {
+        window.location.href = 'index.html';
     }
 });
 
@@ -271,7 +253,6 @@ function setupModalClosing() {
 function updateUserInfo() {
     const user = AuthManager.getUser();
     const userNameElements = document.querySelectorAll('#userName');
-    
     if (user && userNameElements.length > 0) {
         userNameElements.forEach(element => {
             element.textContent = user.nome;
@@ -289,6 +270,63 @@ function setupLogout() {
             }
         });
     });
+}
+
+function setupEditAccount() {
+    const editAccountBtn = document.getElementById('editAccountBtn');
+    if (editAccountBtn) {
+        editAccountBtn.addEventListener('click', () => {
+            const user = AuthManager.getUser();
+            if (user) {
+                const newName = prompt('Digite seu novo nome:', user.nome);
+                if (newName && newName.trim() !== '') {
+                    user.nome = newName.trim();
+                    AuthManager.setUser(user);
+                    updateUserInfo();
+                    Utils.showMessage('Conta atualizada com sucesso!', 'success');
+                }
+            }
+        });
+    }
+}
+
+// Funções específicas para página de login
+if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setupLoginPage();
+        setupRegisterForm();
+    });
+}
+
+function setupRegisterForm() {
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('registerNome').value;
+            const email = document.getElementById('registerEmail').value;
+            const senha = document.getElementById('registerSenha').value;
+            const submitBtn = registerForm.querySelector('button[type="submit"]');
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Cadastrando...';
+                const response = await ApiClient.post('/auth/register', { nome, email, senha });
+                if (response.success) {
+                    AuthManager.setToken(response.token);
+                    AuthManager.setUser(response.user);
+                    Utils.showMessage('Cadastro realizado com sucesso!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                }
+            } catch (error) {
+                Utils.showMessage(error.message || 'Erro ao criar conta', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Cadastrar';
+            }
+        });
+    }
 }
 
 // Funções específicas para página de login
@@ -331,7 +369,7 @@ function setupLoginPage() {
 
 async function handleLogin(e) {
     e.preventDefault();
-    
+
     const email = document.getElementById('loginEmail').value;
     const senha = document.getElementById('loginSenha').value;
     const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -349,10 +387,10 @@ async function handleLogin(e) {
             AuthManager.setToken(response.token);
             AuthManager.setUser(response.user);
             Utils.showMessage('Login realizado com sucesso!', 'success');
-            
+
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
-            }, 1000);
+            }, 500);
         }
 
     } catch (error) {
