@@ -34,4 +34,8 @@ database.connect()
     })
     .catch(err => {
         console.error("Database connection failed:", err);
+<<<<<<< HEAD
     });
+=======
+    });
+>>>>>>> 52a2f644b656d0717b16c71b41dda7e73b5ed18a
