@@ -1,32 +1,15 @@
 {
-  "name": "estudohub",
+  "name": "studyhub",
   "version": "1.0.0",
-  "description": "Sistema de gerenciamento e organização de estudos",
-  "main": "backend/server.js",
+  "description": "A simple study resource sharing platform",
+  "main": "backend/app.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node backend/app.js"
   },
-  "keywords": [
-    "estudos",
-    "educação",
-    "organização"
-  ],
-  "author": "EstudoHub Team",
-  "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^4.21.2",
-    "express-rate-limit": "^7.5.1",
-    "helmet": "^7.2.0",
-    "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^6.10.1",
-    "sqlite3": "^5.1.7"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "sqlite3": "^5.1.6"
   }
 }

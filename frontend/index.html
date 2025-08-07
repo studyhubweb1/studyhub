@@ -1,79 +1,31 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyHub - Login</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>StudyHub</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="login-page">
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <h1>📚 StudyHub</h1>
-                <p>Organize seus estudos de forma inteligente</p>
-            </div>
-
-            <div class="login-tabs">
-                <button id="loginTab" class="tab-button active">Login</button>
-                <button id="registerTab" class="tab-button">Cadastro</button>
-            </div>
-
-            <!-- Formulário de Login -->
-            <form id="loginForm" class="auth-form active">
-                <div class="form-group">
-                    <label for="loginEmail">E-mail</label>
-                    <input type="email" id="loginEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginSenha">Senha</label>
-                    <input type="password" id="loginSenha" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Entrar</button>
-            </form>
-
-            <!-- Formulário de Cadastro -->
-            <div id="registerTab" class="tab">
-                <h2>Criar Conta</h2>
-                <form id="registerForm">
-                    <div class="form-group">
-                        <label for="registerNome">Nome Completo</label>
-                        <input type="text" id="registerNome" placeholder="Nome" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="registerEmail">E-mail</label>
-                        <input type="email" id="registerEmail" placeholder="E-mail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="registerSenha">Senha</label>
-                        <input type="password" id="registerSenha" placeholder="Senha" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
-                </form>
-            </div>
-
-            <!-- Demo Info -->
-            <div class="demo-info">
-                <h3>🚀 Funcionalidades</h3>
-                <ul>
-                    <li>✅ Gerenciamento de áreas de estudo</li>
-                    <li>✅ Organização de tarefas e aulas</li>
-                    <li>✅ Calendário de provas e prazos</li>
-                    <li>✅ Dashboard com estatísticas</li>
-                    <li>✅ Lembretes automáticos por e-mail</li>
-                </ul>
-            </div>
-        </div>
+<body>
+    <h1>StudyHub</h1>
+    <div id="login-form">
+        <h2>Login</h2>
+        <form action="/users/login" method="post">
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="#register">Register</a></p>
     </div>
 
-    <!-- Modal de Feedback -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalMessage"></div>
-        </div>
+    <div id="register-form" style="display:none;">
+        <h2>Register</h2>
+        <form action="/users/register" method="post">
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="#login">Login</a></p>
     </div>
 
-    <script src="js/main.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
