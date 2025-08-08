@@ -30,6 +30,6 @@ app.use('*', (req, res) => {
   res.status(404).json({ error: 'Rota não encontrada' });
 });
 
-app.listen(PORT, '0000', () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 StudyHub rodando na porta ${PORT}`);
 });
