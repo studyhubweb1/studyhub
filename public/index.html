@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyHub - Gerenciador de Estudos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Tela de Login -->
+    <div id="login-screen" class="screen">
+      <div class="login-container">
+        <div class="logo">
+          <h1>📚 StudyHub</h1>
+          <p>Organize seus estudos de forma inteligente</p>
+        </div>
+        
+        <div class="form-container">
+          <div class="tabs">
+            <button id="login-tab" class="tab active" onclick="switchTab('login')">Entrar</button>
+            <button id="register-tab" class="tab" onclick="switchTab('register')">Registrar</button>
+          </div>
+          
+          <form id="auth-form">
+            <div class="input-group">
+              <input type="text" id="username" placeholder="Usuário" required>
+            </div>
+            <div class="input-group">
+              <input type="password" id="password" placeholder="Senha" required>
+            </div>
+            <button type="submit" id="auth-btn" class="btn-primary">Entrar</button>
+          </form>
+          
+          <div id="auth-message" class="message"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tela Principal -->
+    <div id="main-screen" class="screen hidden">
+      <header class="header">
+        <div class="header-left">
+          <h1>📚 StudyHub</h1>
+          <span id="welcome-user"></span>
+        </div>
+        <button id="logout-btn" class="btn-secondary">Sair</button>
+      </header>
+
+      <main class="main-content">
+        <div class="stats-cards">
+          <div class="stat-card">
+            <div class="stat-number" id="total-areas">0</div>
+            <div class="stat-label">Áreas</div>
+          </div>
+        </div>
+
+        <div class="content-section">
+          <div class="section-header">
+            <h2>Minhas Áreas de Estudo</h2>
+            <button id="add-area-btn" class="btn-primary">+ Nova Área</button>
+          </div>
+          
+          <div id="areas-grid" class="areas-grid">
+            <div class="loading">Carregando áreas...</div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modal Nova Área -->
+    <div id="area-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Nova Área de Estudo</h3>
+          <span id="close-modal" class="close">&times;</span>
+        </div>
+        <form id="area-form">
+          <div class="input-group">
+            <label for="area-name">Nome da Área</label>
+            <input type="text" id="area-name" placeholder="Ex: Matemática" required>
+          </div>
+          <div class="input-group">
+            <label for="area-desc">Descrição</label>
+            <textarea id="area-desc" placeholder="Descreva sua área de estudo..."></textarea>
+          </div>
+          <div class="input-group">
+            <label for="area-color">Cor</label>
+            <div class="color-picker">
+              <input type="color" id="area-color" value="#3498db">
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" id="cancel-area" class="btn-secondary">Cancelar</button>
+            <button type="submit" class="btn-primary">Criar Área</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
