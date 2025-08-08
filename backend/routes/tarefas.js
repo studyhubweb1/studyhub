@@ -4,47 +4,21 @@ const { authenticateToken } = require('./auth');
 
 const router = express.Router();
 
-// Middleware de autenticação
 router.use(authenticateToken);
 
-// Listar tarefas por área
 router.get('/area/:areaId', async (req, res) => {
     try {
         const { areaId } = req.params;
-
-        // Verificar se a área pertence ao usuário
-        const area = await db.get(
-            'SELECT id FROM areas WHERE id = ? AND user_id = ?',
-            [areaId, req.user.userId]
-        );
-
-        if (!area) {
-            return res.status(404).json({
-                success: false,
-                message: 'Área não encontrada'
-            });
-        }
-
-        const tarefas = await db.all(
-            'SELECT * FROM tarefas WHERE area_id = ? ORDER BY concluida ASC, created_at DESC',
-            [areaId]
-        );
-
-        res.json({
-            success: true,
-            tarefas
-        });
-
+        const area = await db.get('SELECT id FROM areas WHERE id = ? AND user_id = ?', [areaId, req.user.userId]);
+        if (!area) return res.status(404).json({ success: false, message: 'Área não encontrada' });
+        const tarefas = await db.all('SELECT * FROM tarefas WHERE area_id = ? ORDER BY concluida ASC, created_at DESC', [areaId]);
+        res.json({ success: true, tarefas });
     } catch (error) {
         console.error('Erro ao listar tarefas:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Erro interno do servidor'
-        });
+        res.status(500).json({ success: false, message: 'Erro interno do servidor' });
     }
 });
 
-// Listar todas as tarefas do usuário
 router.get('/', async (req, res) => {
     try {
         const tarefas = await db.all(
@@ -55,77 +29,31 @@ router.get('/', async (req, res) => {
              ORDER BY t.concluida ASC, t.created_at DESC`,
             [req.user.userId]
         );
-
-        res.json({
-            success: true,
-            tarefas
-        });
-
+        res.json({ success: true, tarefas });
     } catch (error) {
         console.error('Erro ao listar tarefas:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Erro interno do servidor'
-        });
+        res.status(500).json({ success: false, message: 'Erro interno do servidor' });
     }
 });
 
-// Criar nova tarefa
 router.post('/', async (req, res) => {
     try {
         const { titulo, area_id } = req.body;
-
-        if (!titulo || !area_id) {
-            return res.status(400).json({
-                success: false,
-                message: 'Título e área são obrigatórios'
-            });
-        }
-
-        // Verificar se a área pertence ao usuário
-        const area = await db.get(
-            'SELECT id FROM areas WHERE id = ? AND user_id = ?',
-            [area_id, req.user.userId]
-        );
-
-        if (!area) {
-            return res.status(404).json({
-                success: false,
-                message: 'Área não encontrada'
-            });
-        }
-
-        const result = await db.run(
-            'INSERT INTO tarefas (titulo, area_id) VALUES (?, ?)',
-            [titulo, area_id]
-        );
-
-        const novaTarefa = await db.get(
-            'SELECT * FROM tarefas WHERE id = ?',
-            [result.id]
-        );
-
-        res.status(201).json({
-            success: true,
-            message: 'Tarefa criada com sucesso',
-            tarefa: novaTarefa
-        });
-
+        if (!titulo || !area_id) return res.status(400).json({ success: false, message: 'Título e área são obrigatórios' });
+        const area = await db.get('SELECT id FROM areas WHERE id = ? AND user_id = ?', [area_id, req.user.userId]);
+        if (!area) return res.status(404).json({ success: false, message: 'Área não encontrada' });
+        const result = await db.run('INSERT INTO tarefas (titulo, area_id) VALUES (?, ?)', [titulo, area_id]);
+        const novaTarefa = await db.get('SELECT * FROM tarefas WHERE id = ?', [result.id]);
+        res.status(201).json({ success: true, message: 'Tarefa criada com sucesso', tarefa: novaTarefa });
     } catch (error) {
         console.error('Erro ao criar tarefa:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Erro interno do servidor'
-        });
+        res.status(500).json({ success: false, message: 'Erro interno do servidor' });
     }
 });
 
-// Alterar status da tarefa
 router.put('/:id/toggle', async (req, res) => {
     try {
         const { id } = req.params;
-
-        // Verificar se a tarefa pertence ao usuário
         const tarefa = await db.get(
             `SELECT t.*, a.user_id 
              FROM tarefas t
@@ -133,48 +61,21 @@ router.put('/:id/toggle', async (req, res) => {
              WHERE t.id = ? AND a.user_id = ?`,
             [id, req.user.userId]
         );
-
-        if (!tarefa) {
-            return res.status(404).json({
-                success: false,
-                message: 'Tarefa não encontrada'
-            });
-        }
-
+        if (!tarefa) return res.status(404).json({ success: false, message: 'Tarefa não encontrada' });
         const novoConcluida = !tarefa.concluida;
         const completed_at = novoConcluida ? new Date().toISOString() : null;
-
-        await db.run(
-            'UPDATE tarefas SET concluida = ?, completed_at = ? WHERE id = ?',
-            [novoConcluida, completed_at, id]
-        );
-
-        const tarefaAtualizada = await db.get(
-            'SELECT * FROM tarefas WHERE id = ?',
-            [id]
-        );
-
-        res.json({
-            success: true,
-            message: `Tarefa ${novoConcluida ? 'concluída' : 'marcada como pendente'}`,
-            tarefa: tarefaAtualizada
-        });
-
+        await db.run('UPDATE tarefas SET concluida = ?, completed_at = ? WHERE id = ?', [novoConcluida, completed_at, id]);
+        const tarefaAtualizada = await db.get('SELECT * FROM tarefas WHERE id = ?', [id]);
+        res.json({ success: true, message: `Tarefa ${novoConcluida ? 'concluída' : 'marcada como pendente'}`, tarefa: tarefaAtualizada });
     } catch (error) {
         console.error('Erro ao alterar status da tarefa:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Erro interno do servidor'
-        });
+        res.status(500).json({ success: false, message: 'Erro interno do servidor' });
     }
 });
 
-// Excluir tarefa
 router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-
-        // Verificar se a tarefa pertence ao usuário
         const tarefa = await db.get(
             `SELECT t.id 
              FROM tarefas t
@@ -182,27 +83,12 @@ router.delete('/:id', async (req, res) => {
              WHERE t.id = ? AND a.user_id = ?`,
             [id, req.user.userId]
         );
-
-        if (!tarefa) {
-            return res.status(404).json({
-                success: false,
-                message: 'Tarefa não encontrada'
-            });
-        }
-
+        if (!tarefa) return res.status(404).json({ success: false, message: 'Tarefa não encontrada' });
         await db.run('DELETE FROM tarefas WHERE id = ?', [id]);
-
-        res.json({
-            success: true,
-            message: 'Tarefa excluída com sucesso'
-        });
-
+        res.json({ success: true, message: 'Tarefa excluída com sucesso' });
     } catch (error) {
         console.error('Erro ao excluir tarefa:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Erro interno do servidor'
-        });
+        res.status(500).json({ success: false, message: 'Erro interno do servidor' });
     }
 });
 
