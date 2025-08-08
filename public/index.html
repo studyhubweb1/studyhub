@@ -47,15 +47,34 @@
         <button id="logout-btn" class="btn-secondary">Sair</button>
       </header>
 
+      <!-- Navegação -->
+      <nav class="nav-tabs">
+        <button id="areas-nav" class="nav-tab active" onclick="showSection('areas')">
+          📁 Áreas
+        </button>
+        <button id="provas-nav" class="nav-tab" onclick="showSection('provas')">
+          📝 Provas
+        </button>
+      </nav>
+
       <main class="main-content">
         <div class="stats-cards">
           <div class="stat-card">
             <div class="stat-number" id="total-areas">0</div>
             <div class="stat-label">Áreas</div>
           </div>
+          <div class="stat-card">
+            <div class="stat-number" id="total-provas">0</div>
+            <div class="stat-label">Provas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="provas-proximas">0</div>
+            <div class="stat-label">Próximas</div>
+          </div>
         </div>
 
-        <div class="content-section">
+        <!-- Seção Áreas -->
+        <div id="areas-section" class="content-section">
           <div class="section-header">
             <h2>Minhas Áreas de Estudo</h2>
             <button id="add-area-btn" class="btn-primary">+ Nova Área</button>
@@ -63,6 +82,31 @@
           
           <div id="areas-grid" class="areas-grid">
             <div class="loading">Carregando áreas...</div>
+          </div>
+        </div>
+
+        <!-- Seção Provas -->
+        <div id="provas-section" class="content-section hidden">
+          <div class="section-header">
+            <h2>Minhas Provas</h2>
+            <button id="add-prova-btn" class="btn-primary">+ Nova Prova</button>
+          </div>
+          
+          <!-- Filtros -->
+          <div class="filters">
+            <select id="status-filter" onchange="app.filterProvas()">
+              <option value="">Todos os status</option>
+              <option value="nao_estudado">Não estudado</option>
+              <option value="estudando">Estudando</option>
+              <option value="concluido">Concluído</option>
+            </select>
+            <select id="area-filter" onchange="app.filterProvas()">
+              <option value="">Todas as áreas</option>
+            </select>
+          </div>
+          
+          <div id="provas-grid" class="provas-grid">
+            <div class="loading">Carregando provas...</div>
           </div>
         </div>
       </main>
@@ -73,7 +117,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3>Nova Área de Estudo</h3>
-          <span id="close-modal" class="close">&times;</span>
+          <span id="close-area-modal" class="close">&times;</span>
         </div>
         <form id="area-form">
           <div class="input-group">
@@ -93,6 +137,40 @@
           <div class="modal-actions">
             <button type="button" id="cancel-area" class="btn-secondary">Cancelar</button>
             <button type="submit" class="btn-primary">Criar Área</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Nova Prova -->
+    <div id="prova-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Nova Prova</h3>
+          <span id="close-prova-modal" class="close">&times;</span>
+        </div>
+        <form id="prova-form">
+          <div class="input-group">
+            <label for="prova-name">Nome da Prova</label>
+            <input type="text" id="prova-name" placeholder="Ex: Prova de Cálculo I" required>
+          </div>
+          <div class="input-group">
+            <label for="prova-area">Área de Estudo</label>
+            <select id="prova-area">
+              <option value="">Selecione uma área</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="prova-date">Data da Prova</label>
+            <input type="date" id="prova-date" required>
+          </div>
+          <div class="input-group">
+            <label for="prova-desc">Descrição</label>
+            <textarea id="prova-desc" placeholder="Conteúdo, observações..."></textarea>
+          </div>
+          <div class="modal-actions">
+            <button type="button" id="cancel-prova" class="btn-secondary">Cancelar</button>
+            <button type="submit" class="btn-primary">Criar Prova</button>
           </div>
         </form>
       </div>

@@ -6,6 +6,7 @@ require('./database'); // Inicializa o banco
 
 const authRoutes = require('./routes/auth');
 const areasRoutes = require('./routes/areas');
+const provasRoutes = require('./routes/provas'); // NOVA LINHA
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Rotas da API
 app.use('/api/auth', authRoutes);
 app.use('/api/areas', areasRoutes);
+app.use('/api/provas', provasRoutes);
 
 // Rota principal - redireciona para index.html
 app.get('/', (req, res) => {

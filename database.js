@@ -32,6 +32,21 @@ db.serialize(() => {
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
   )`);
 
+  // Tabela de provas - NOVA
+  db.run(`CREATE TABLE IF NOT EXISTS provas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    descricao TEXT,
+    data_prova DATE NOT NULL,
+    area_id INTEGER,
+    status TEXT DEFAULT 'nao_estudado',
+    lembrete_ativo INTEGER DEFAULT 1,
+    user_id INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(area_id) REFERENCES areas(id) ON DELETE SET NULL,
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+  )`);
+
   console.log('✅ Tabelas criadas/verificadas');
 });
 
